@@ -1,9 +1,12 @@
 # manaba scraping tool
 
+This is a script that scrape assignments which haven't been submitted.
+
 ## install
 
-依存するライブラリは
+It requires these softwares.
 
+- webdriver
 - selenium
 - beautifulsoup4
 - lxml
@@ -22,4 +25,5 @@ pip install selenium beautifulsoup4 lxml
 
 ### ID and password
 
-`scraping.py`と同じフォルダに`secret.txt`を作成し、1行目にID、2行目にパスワードを書く
+First, Create `secret.txt` in a directory which contains `scraping.py`.
+Scond, Write ID in first row and password in second row.
