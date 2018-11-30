@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>統一認証システム (Unified Authentication System)</title>
+        <link rel="stylesheet" type="text/css" href="/idp/css/main.css">
+    </head>
+    <body>
+    <div class="wrapper">
+      <div class="container">
+        <header>
+          <img src="/idp/images/ia-logo.gif" alt="筑波大学">
+          <h2>統一認証システム (Unified Authentication System)</h2>
+        </header>
+
+        <div class="content">
+          <div class="column one">
+            
+
+            <form action="/idp/profile/SAML2/Redirect/SSO;jsessionid=53C7882E49C6096EC5287A33F09557DB?execution=e1s1" method="post">
+
+                                      <legend>
+                ログインサービス: &#x7b51;&#x6ce2;&#x5927;&#x5b66;&#x306e;manaba&#x30b5;&#x30fc;&#x30d3;&#x30b9;
+              </legend>
+                                    
+                          <div class="form-element-wrapper">
+                <label for="username">ユーザーID (user id)</label>
+                <input class="form-element form-field" id="username" name="j_username" type="text"
+                	value="">
+                (<a target="_blank" href="http://www.cc.tsukuba.ac.jp/wp/service/account/#utid-13" style="color:#00f">UTID-13</a> or <a target="_blank" href="http://www.cc.tsukuba.ac.jp/wp/service/account/#utid-name" style="color:#00f">UTID-NAME</a>)
+              </div>
+
+              <div class="form-element-wrapper">
+                <label for="password">パスワード (password)</label>
+                <input class="form-element form-field" id="password" name="j_password" type="password" value="">
+              </div>
+
+              <div class="form-element-wrapper">
+                <label for="donotcache">
+                                    <span>
+                                          &#x7b51;&#x6ce2;&#x5927;&#x5b66;
+                                                              [&#x7b51;&#x6ce2;&#x5927;&#x5b66;&#x306e;manaba&#x30b5;&#x30fc;&#x30d3;&#x30b9;]
+                                        <br/> 
+                  </span>
+<!--
+                  <input type="checkbox" name="donotcache" value="1" id="donotcache">
+                  ログインを記憶しません。-->
+                </label>
+              </div>
+            
+                        
+                          <div class="form-element-wrapper">
+                <button class="form-element form-button" type="submit" name="_eventId_proceed"
+                    onClick="this.childNodes[0].nodeValue='ログインしています…'"
+                    >Login</button>
+              </div>
+            
+                        </form>
+
+			
+                                                  &#x7b51;&#x6ce2;&#x5927;&#x5b66;&#x306e;manaba&#x30b5;&#x30fc;&#x30d3;&#x30b9;&#xff08;&#x6559;&#x80b2;&#x652f;&#x63f4;&#x30a2;&#x30d7;&#x30ea;&#x30b1;&#x30fc;&#x30b7;&#x30e7;&#x30f3;&#xff09;
+                        
+          </div>
+          <div class="column two">
+            <ul class="list list-help">
+              <li>
+                このページをブックマークしないでください．
+              </li>
+              <li>
+                (Please do not bookmark this page.)
+              </li>
+              <li>
+                <span style="font-size: x-small">
+                  このページに移行する前の，システムごとのURLをブックマークするようにしてください．
+                </span>
+              </li>
+              <li>
+                <span style="font-size: x-small">
+                  (Please bookmark system-specific URL before jumping to this page.)
+                </span>
+              </li>
+              <li>
+                <a target="_blank" href="http://www.cc.tsukuba.ac.jp/wp/idp-login-page/" style="color:#00f">統一認証システムのログイン画面の変更について</a>
+              </li>
+              <li>
+                <a target="_blank" href="http://www.cc.tsukuba.ac.jp/wp_e/idp-login-page/" style="color:#00f">(On the Change of the Layout of the Login Page of the Unified Authentication System)</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="container container-footer">
+        </div>
+      </footer>
+    </div>
+    
+ 	</body>
+</html>
