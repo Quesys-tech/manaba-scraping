@@ -1,6 +1,6 @@
 # manaba scraping tool
 
-This is a script that scrape assignments which haven't been submitted.
+This is a script that scrape assignments which haven't been submitted, and notify if deadline is close.
 
 ## install
 
