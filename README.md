@@ -18,7 +18,7 @@ Install webdriver which adopts your web browser.
 
 - Chrome : [ChromeDriver](http://chromedriver.chromium.org/downloads)
 - Firefox : [geckodriver](https://github.com/mozilla/geckodriver/releases)
-- other borwser : do yourself(Author don't know).
+- other borwser : do yourself(I don't know).
 
 ### instalation of libraries using conda
 
