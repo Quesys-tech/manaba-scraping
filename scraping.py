@@ -5,6 +5,9 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+from selenium.webdriver.common.by import By
 
 
 def GetTable():
@@ -24,15 +27,15 @@ def GetTable():
     driver.find_element_by_name("j_username").send_keys(utid13)
     driver.find_element_by_name("j_password").send_keys(password)
 
-    sleep(1)
+    WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located((By.NAME, "_eventId_proceed")))
     driver.find_element_by_name("_eventId_proceed").click()
 
     # 未提出課題のページへ飛ぶ
-    sleep(1)
+    WebDriverWait(driver, 10).until(expected_conditions.url_changes("https://manaba.tsukuba.ac.jp/"))
     driver.get('https://manaba.tsukuba.ac.jp/ct/home_library_query')
 
     # テキスト取得
-    sleep(1)
+    WebDriverWait(driver, 10).until(expected_conditions.presence_of_element_located((By.CLASS_NAME, "stdlist")))
     soup = BeautifulSoup(driver.page_source, "lxml")
 
     rows = soup.find('table', class_='stdlist').find_all(
