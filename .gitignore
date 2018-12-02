@@ -2,3 +2,7 @@
 
 #id&password
 secret.txt
+
+#chromedriver
+chromedriver.exe
+chromedriver
