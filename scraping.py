@@ -1,6 +1,6 @@
 import datetime
+import pytz
 from time import sleep
-
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -8,8 +8,11 @@ from selenium.webdriver.common.keys import Keys
 
 
 def GetTable():
-    driver = webdriver.Chrome('C:\dev\chromedriver.exe')# 環境によって変える
-    
+
+    webdriver_path = 'C:\dev\chromedriver.exe'  # 環境によって変える
+
+    driver = webdriver.Chrome(webdriver_path)
+
     driver.get('https://manaba.tsukuba.ac.jp/')
 
     utid13 = ''
@@ -46,7 +49,7 @@ def GetTable():
 
         cells = row.find_all('td')
 
-        #要素のテキストを代入
+        # 要素のテキストを代入
         assignment["course"] = cells[2].div.a.text
         assignment["title"] = cells[1].div.a.text
         assignment["link"] = "https://manaba.tsukuba.ac.jp/" + \
@@ -62,7 +65,31 @@ def GetTable():
 
 
 def main():
-    GetTable()
+    assignments = GetTable()
+
+    criteria_hours = 7*24  # 通知を締切までの残り時間(単位:h)
+
+    now = datetime.datetime.utcnow()
+    now = now.replace(tzinfo=pytz.utc)
+
+    for assignment in assignments:
+
+        if len(assignment['deadline']) == 0: #締切の設定がないものは無視する
+            continue
+
+        deadline = datetime.datetime.strptime(
+            assignment['deadline']+'+0900', '%Y-%m-%d %H:%M%z')  # 日本標準時を示す"+0900"を追加
+
+        # print(deadline)
+
+        timedelta = deadline - now
+
+        if timedelta <= datetime.timedelta(hours=criteria_hours): #基準以内の処理をする
+            print(assignment['title']+'\t' +
+                  str(timedelta)+'\t'+'deadline is near.')
+        else:
+            print(assignment['title']+'\t'+str(timedelta) +
+                  '\t'+'deadline is not near.')
 
 
 if __name__ == '__main__':
