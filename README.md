@@ -10,6 +10,7 @@ It requires these libraries.
 - selenium
 - beautifulsoup4
 - lxml
+- pytz
 
 ### webdriver
 
@@ -22,13 +23,13 @@ Install webdriver which adopts your web browser.
 ### instalation of libraries using conda
 
 ```:shell
-conda install selenium beautifulsoup4 lxml
+conda install selenium beautifulsoup4 lxml pytz
 ```
 
 ### instalation of libraries using pip
 
 ```:shell
-pip install selenium beautifulsoup4 lxml
+pip install selenium beautifulsoup4 lxml pytz
 ```
 
 ### ID and password
