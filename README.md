@@ -11,13 +11,20 @@ It requires these softwares.
 - beautifulsoup4
 - lxml
 
+### webdriver
+Install webdriver which adopts your web browser.
+
+- Chrome : [ChromeDriver](http://chromedriver.chromium.org/downloads)
+- Firefox : [geckodriver](https://github.com/mozilla/geckodriver/releases)
+- other borwser : do yourself(Author don't know).
+
 ### using conda
 
 ```:shell
 conda install selenium beautifulsoup4 lxml
 ```
 
-### pip
+### using pip
 
 ```:shell
 pip install selenium beautifulsoup4 lxml
