@@ -14,7 +14,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 
 def GetTable():
 
-    webdriver_path = 'C:\dev\chromedriver.exe'  # 環境によって変える
+    # Linux
+    webdriver_path = './chromedriver'
+    # windows
+    #webdriver_path = '.\\chromedriver.exe'
 
     driver = webdriver.Chrome(webdriver_path)
 
