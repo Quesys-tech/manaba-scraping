@@ -95,8 +95,8 @@ def FindNearDeadline(assignments):
 
         timedelta = deadline - now
 
-        if timedelta <= datetime.timedelta(hours=criteria_hours):  # 基準以内の処理をする
-
+        # 基準以内の処理をする
+        if timedelta <= datetime.timedelta(hours=criteria_hours) and timedelta > datetime.timedelta(0):
             ret.append(
                 {
                     'title': assignment['title'],
