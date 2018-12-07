@@ -1,57 +1,67 @@
 import datetime
 import json
+from time import sleep
 
 import pytz
 import requests
 from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.ui import WebDriverWait
 
 
 def GetTable():
 
-    # Linux
-    webdriver_path = './chromedriver'
-    # windows
-    #webdriver_path = '.\\chromedriver.exe'
-
-    driver = webdriver.Chrome(webdriver_path)
-
-    driver.get('https://manaba.tsukuba.ac.jp/')
-
-    utid13 = ''
+    username = ''
     password = ''
 
     # ファイルから資格情報の読み取り
     with open('secret.txt') as f:
         l = f.readlines()
-        utid13 = l[0]
+        username = l[0]
         password = l[1]
 
-    driver.find_element_by_name("j_username").send_keys(utid13)
-    driver.find_element_by_name("j_password").send_keys(password)
+    with requests.Session() as s:#セッションを生成
+        #ヘッダ偽装
+        s.headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 
-    WebDriverWait(driver, 10).until(
-        expected_conditions.presence_of_element_located((By.NAME, "_eventId_proceed")))
-    driver.find_element_by_name("_eventId_proceed").click()
+        r = s.get('https://manaba.tsukuba.ac.jp/')
 
-    # 未提出課題のページへ飛ぶ
-    WebDriverWait(driver, 10).until(
-        expected_conditions.url_changes("https://manaba.tsukuba.ac.jp/"))
-    driver.get('https://manaba.tsukuba.ac.jp/ct/home_library_query')
+        soup = BeautifulSoup(r.content, "lxml")
+        form = soup.find("form")
 
-    # テキスト取得
-    WebDriverWait(driver, 10).until(
-        expected_conditions.presence_of_element_located((By.CLASS_NAME, "stdlist")))
-    soup = BeautifulSoup(driver.page_source, "lxml")
+        post_url = 'https://idp.account.tsukuba.ac.jp/'+form.get("action")
 
-    rows = soup.find('table', class_='stdlist').find_all(
-        'tr', class_=["row0", "row1"])
+        payload ={
+            '_eventId_proceed':'',
+            'j_password':password,
+            'j_username':username
+        }
 
+        #postしたあとcontinueボタンを押すページに飛ばされる
+        r = s.post(post_url,data=payload)
+
+
+        #continueボタンを押すときに送信されるデータを解析
+        soup = BeautifulSoup(r.content, "lxml")
+
+        #continueボタンを押したときに送信される内容
+        payload={
+            'SAMLResponse':'',
+            'RelayState':'',
+            'submit':'Continue'
+        }
+
+        payload['RelayState']=soup.find(attrs={'name': 'RelayState'}).get('value')
+        payload['SAMLResponse']=soup.find(attrs={'name': 'SAMLResponse'}).get('value')
+        
+        post_url = soup.find('form').get('action')
+
+        s.post(post_url,payload)#continueボタンを押す
+
+        #manabaの課題ページを取得
+        r=s.get('https://manaba.tsukuba.ac.jp/ct/home_library_query')
+
+    #未提出課題の表を解析
+    soup = BeautifulSoup(r.content, "lxml")
+    rows = soup.find('table', class_='stdlist').find_all('tr', class_=["row0", "row1"])
     assignments = list()
 
     for row in rows:
@@ -63,14 +73,9 @@ def GetTable():
         # 要素のテキストを代入
         assignment["course"] = cells[2].div.a.text
         assignment["title"] = cells[1].div.a.text
-        assignment["link"] = "https://manaba.tsukuba.ac.jp/" + \
-            cells[1].div.a.get('href')
+        assignment["link"] = "https://manaba.tsukuba.ac.jp/" + cells[1].div.a.get('href')
         assignment["deadline"] = cells[4].text
         assignments.append(assignment)
-
-    # 後始末
-    driver.close()
-    driver.quit()
 
     return assignments
 
