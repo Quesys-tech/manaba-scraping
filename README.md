@@ -14,13 +14,13 @@ It requires these libraries.
 ### instalation of libraries using conda
 
 ```:shell
-conda install selenium beautifulsoup4 lxml pytz requests
+conda install beautifulsoup4 lxml pytz requests
 ```
 
 ### instalation of libraries using pip
 
 ```:shell
-pip install selenium beautifulsoup4 lxml pytz requests
+pip install beautifulsoup4 lxml pytz requests
 ```
 
 ### ID and password
