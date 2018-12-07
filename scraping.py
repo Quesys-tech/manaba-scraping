@@ -17,9 +17,10 @@ def GetTable():
         username = l[0]
         password = l[1]
 
-    with requests.Session() as s:#セッションを生成
-        #ヘッダ偽装
-        s.headers={'User-Agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
+    with requests.Session() as s:  # セッションを生成
+        # ヘッダ偽装
+        s.headers = {
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
 
         r = s.get('https://manaba.tsukuba.ac.jp/')
 
@@ -28,39 +29,41 @@ def GetTable():
 
         post_url = 'https://idp.account.tsukuba.ac.jp/'+form.get("action")
 
-        payload ={
-            '_eventId_proceed':'',
-            'j_password':password,
-            'j_username':username
+        payload = {
+            '_eventId_proceed': '',
+            'j_password': password,
+            'j_username': username
         }
 
-        #postしたあとcontinueボタンを押すページに飛ばされる
-        r = s.post(post_url,data=payload)
+        # postしたあとcontinueボタンを押すページに飛ばされる
+        r = s.post(post_url, data=payload)
 
-
-        #continueボタンを押すときに送信されるデータを解析
+        # continueボタンを押すときに送信されるデータを解析
         soup = BeautifulSoup(r.content, "lxml")
 
-        #continueボタンを押したときに送信される内容
-        payload={
-            'SAMLResponse':'',
-            'RelayState':'',
-            'submit':'Continue'
+        # continueボタンを押したときに送信される内容
+        payload = {
+            'SAMLResponse': '',
+            'RelayState': '',
+            'submit': 'Continue'
         }
 
-        payload['RelayState']=soup.find(attrs={'name': 'RelayState'}).get('value')
-        payload['SAMLResponse']=soup.find(attrs={'name': 'SAMLResponse'}).get('value')
-        
+        payload['RelayState'] = soup.find(
+            attrs={'name': 'RelayState'}).get('value')
+        payload['SAMLResponse'] = soup.find(
+            attrs={'name': 'SAMLResponse'}).get('value')
+
         post_url = soup.find('form').get('action')
 
-        s.post(post_url,payload)#continueボタンを押す
+        s.post(post_url, payload)  # continueボタンを押す
 
-        #manabaの課題ページを取得
-        r=s.get('https://manaba.tsukuba.ac.jp/ct/home_library_query')
+        # manabaの課題ページを取得
+        r = s.get('https://manaba.tsukuba.ac.jp/ct/home_library_query')
 
-    #未提出課題の表を解析
+    # 未提出課題の表を解析
     soup = BeautifulSoup(r.content, "lxml")
-    rows = soup.find('table', class_='stdlist').find_all('tr', class_=["row0", "row1"])
+    rows = soup.find('table', class_='stdlist').find_all(
+        'tr', class_=["row0", "row1"])
     assignments = list()
 
     for row in rows:
@@ -72,7 +75,8 @@ def GetTable():
         # 要素のテキストを代入
         assignment["course"] = cells[2].div.a.text
         assignment["title"] = cells[1].div.a.text
-        assignment["link"] = "https://manaba.tsukuba.ac.jp/" + cells[1].div.a.get('href')
+        assignment["link"] = "https://manaba.tsukuba.ac.jp/" + \
+            cells[1].div.a.get('href')
         assignment["deadline"] = cells[4].text
         assignments.append(assignment)
 
