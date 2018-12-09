@@ -132,11 +132,27 @@ def push2slack(near_deadlines):
         'link_names': 1,  # メンションを有効にする
     }))
 
+# line notifyに送信
+
+
+def push2line(near_deadlines):
+    url = "https://notify-api.line.me/api/notify"
+    token = "token"
+
+    message_body = ""
+    for assignment in near_deadlines:
+        message_body += assignment['title'] + \
+            ' 残り時間:'+str(assignment['timedelta']) + '\n'
+
+    requests.post(url, headers={
+                  "Authorization": "Bearer " + token}, params={"message": message_body})
+
 
 def main():
     assignments = GetTable()
     near_deadlines = FindNearDeadline(assignments)
-    push2slack(near_deadlines)
+    # push2slack(near_deadlines)
+    push2line(near_deadlines)
 
 
 if __name__ == '__main__':
