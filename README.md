@@ -25,5 +25,22 @@ pip install beautifulsoup4 lxml pytz requests
 
 ### ID and password
 
-First, Create `secret.txt` in a directory which contains `scraping.py`.
-Scond, Write ID in first row and password in second row.
+First, Create `settings.json` in a directory which contains `scraping.py`.
+Scond, Write ID in first row and password as follows.
+
+```json
+{
+    "base":{
+        "user":"1234567890123",
+        "pass":"password"
+    },
+    "line":{
+        "is_enabled":true,
+        "token":"line-token-from-line-notify"
+    },
+    "slack":{
+        "is_enabled":true,
+        "token":"slack-token-from-custom-integration"
+    }
+}
+```

@@ -1,21 +1,13 @@
 import datetime
 import json
-
+from pathlib import Path
+import sys
 import pytz
 import requests
 from bs4 import BeautifulSoup
 
 
-def GetTable():
-
-    username = ''
-    password = ''
-
-    # ファイルから資格情報の読み取り
-    with open('secret.txt') as f:
-        l = f.readlines()
-        username = l[0]
-        password = l[1]
+def GetTable(username,password):
 
     with requests.Session() as s:  # セッションを生成
         # ヘッダ偽装
@@ -83,9 +75,8 @@ def GetTable():
     return assignments
 
 
-def FindNearDeadline(assignments):
-    criteria_hours = 7*24  # 通知を締切までの残り時間(単位:h)
-
+def FindNearDeadline(assignments,criteria_hours):
+    
     now = datetime.datetime.utcnow()
     now = now.replace(tzinfo=pytz.utc)
 
@@ -115,9 +106,11 @@ def FindNearDeadline(assignments):
 
     return ret
 
+# slackに送信
+def push2slack(near_deadlines,token):
 
-def push2slack(near_deadlines):
-    webhook_url = 'webhook url'
+    url = 'https://hook.slack.com/'
+    webhook_url=url+token
 
     message_body = '@channel\n'
     for assignment in near_deadlines:
@@ -133,12 +126,10 @@ def push2slack(near_deadlines):
     }))
 
 # line notifyに送信
+def push2line(near_deadlines,token):
 
-
-def push2line(near_deadlines):
     url = "https://notify-api.line.me/api/notify"
-    token = "token"
-
+    
     message_body = ""
     for assignment in near_deadlines:
         message_body += assignment['title'] + \
@@ -149,11 +140,33 @@ def push2line(near_deadlines):
 
 
 def main():
-    assignments = GetTable()
-    near_deadlines = FindNearDeadline(assignments)
-    # push2slack(near_deadlines)
-    push2line(near_deadlines)
+    
+    # ファイルから設定の読み取り
+    secret_file = Path(__file__).parent.resolve() / 'settings.json'
 
+    try:
+        with open(str(secret_file)) as f:
+
+            json_data=json.load(f)
+
+            username=json_data["base"]['user']
+            password=json_data['base']['pass']
+            assignments = GetTable(username,password)
+        
+            criteria_hours=json_data['base']['criteria_hours']
+            near_deadlines = FindNearDeadline(assignments,criteria_hours)
+        
+            if json_data['Line']['is_enabled']==True:
+            
+                push2line(near_deadlines,json_data['Line']['token'])
+        
+            if json_data['Slack']['is_enabled']==True:
+    
+                push2line(near_deadlines,json_data['Slack']['token'])
+
+    except FileNotFoundError:
+        sys.stderr.write('Settings.json not found!\n')
+        sys.exit(1)
 
 if __name__ == '__main__':
     main()
