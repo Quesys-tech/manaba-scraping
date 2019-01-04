@@ -156,13 +156,13 @@ def main():
             criteria_hours=json_data['base']['criteria_hours']
             near_deadlines = FindNearDeadline(assignments,criteria_hours)
         
-            if json_data['Line']['is_enabled']==True:
+            if json_data['line']['is_enabled']==True:
             
-                push2line(near_deadlines,json_data['Line']['token'])
+                push2line(near_deadlines,json_data['line']['token'])
         
-            if json_data['Slack']['is_enabled']==True:
+            if json_data['slack']['is_enabled']==True:
     
-                push2line(near_deadlines,json_data['Slack']['token'])
+                push2line(near_deadlines,json_data['slack']['token'])
 
     except FileNotFoundError:
         sys.stderr.write('Settings.json not found!\n')

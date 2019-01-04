@@ -32,7 +32,8 @@ Scond, Write ID in first row and password as follows.
 {
     "base":{
         "user":"1234567890123",
-        "pass":"password"
+        "pass":"password",
+        "criteria_hours":168
     },
     "line":{
         "is_enabled":true,
