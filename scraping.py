@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def GetTable(username,password):
+def GetTable(username, password):
 
     with requests.Session() as s:  # セッションを生成
         # ヘッダ偽装
@@ -75,8 +75,8 @@ def GetTable(username,password):
     return assignments
 
 
-def FindNearDeadline(assignments,criteria_hours):
-    
+def FindNearDeadline(assignments, criteria_hours):
+
     now = datetime.datetime.utcnow()
     now = now.replace(tzinfo=pytz.utc)
 
@@ -107,10 +107,12 @@ def FindNearDeadline(assignments,criteria_hours):
     return ret
 
 # slackに送信
-def push2slack(near_deadlines,token):
+
+
+def push2slack(near_deadlines, token):
 
     url = 'https://hook.slack.com/'
-    webhook_url=url+token
+    webhook_url = url+token
 
     message_body = '@channel\n'
     for assignment in near_deadlines:
@@ -126,10 +128,12 @@ def push2slack(near_deadlines,token):
     }))
 
 # line notifyに送信
-def push2line(near_deadlines,token):
+
+
+def push2line(near_deadlines, token):
 
     url = "https://notify-api.line.me/api/notify"
-    
+
     message_body = ""
     for assignment in near_deadlines:
         message_body += assignment['title'] + \
@@ -140,33 +144,34 @@ def push2line(near_deadlines,token):
 
 
 def main():
-    
+
     # ファイルから設定の読み取り
     secret_file = Path(__file__).parent.resolve() / 'settings.json'
 
     try:
         with open(str(secret_file)) as f:
 
-            json_data=json.load(f)
+            json_data = json.load(f)
 
-            username=json_data["base"]['user']
-            password=json_data['base']['pass']
-            assignments = GetTable(username,password)
-        
-            criteria_hours=json_data['base']['criteria_hours']
-            near_deadlines = FindNearDeadline(assignments,criteria_hours)
-        
-            if json_data['line']['is_enabled']==True:
-            
-                push2line(near_deadlines,json_data['line']['token'])
-        
-            if json_data['slack']['is_enabled']==True:
-    
-                push2line(near_deadlines,json_data['slack']['token'])
+            username = json_data["base"]['user']
+            password = json_data['base']['pass']
+            assignments = GetTable(username, password)
+
+            criteria_hours = json_data['base']['criteria_hours']
+            near_deadlines = FindNearDeadline(assignments, criteria_hours)
+
+            if json_data['line']['is_enabled'] == True:
+
+                push2line(near_deadlines, json_data['line']['token'])
+
+            if json_data['slack']['is_enabled'] == True:
+
+                push2line(near_deadlines, json_data['slack']['token'])
 
     except FileNotFoundError:
         sys.stderr.write('Settings.json not found!\n')
         sys.exit(1)
+
 
 if __name__ == '__main__':
     main()
