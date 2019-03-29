@@ -13,14 +13,21 @@ It requires these libraries.
 
 ### instalation of libraries using conda
 
-```:shell
+```shell
 conda install beautifulsoup4 lxml pytz requests
 ```
 
 ### instalation of libraries using pip
 
-```:shell
+```shell
 pip install beautifulsoup4 lxml pytz requests
+```
+
+### instalation of libraries using pipenv
+
+```shell
+cd manaba-scraping
+pipenv install
 ```
 
 ### ID and password
@@ -33,7 +40,7 @@ Scond, Write ID in first row and password as follows.
     "base":{
         "user":"1234567890123",
         "pass":"password",
-        "criteria_hours":168
+        "criteria_hours":168 
     },
     "line":{
         "is_enabled":true,
