@@ -12,14 +12,14 @@ def GetTable(username, password):
     with requests.Session() as s:  # セッションを生成
         # ヘッダ偽装
         s.headers = {
-            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'}
+            'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:66.0) Gecko/20100101 Firefox/66.0','Content-Language': 'ja'}
 
         r = s.get('https://manaba.tsukuba.ac.jp/')
 
         soup = BeautifulSoup(r.content, "lxml")
         form = soup.find("form")
 
-        post_url = 'https://idp.account.tsukuba.ac.jp/'+form.get("action")
+        post_url = 'https://idp.account.tsukuba.ac.jp'+form.get("action")
 
         payload = {
             '_eventId_proceed': '',
