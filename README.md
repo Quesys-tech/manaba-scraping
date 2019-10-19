@@ -30,6 +30,16 @@ cd manaba-scraping
 pipenv install
 ```
 
+### deploy to AWS Lambda
+- First, execute these commands.
+```
+pip install beautifulsoup4 lxml pytz requests -t ./packages
+zip -r function.zip ./packeages
+zip function.zip lambda-function.py scraping.py 
+```
+
+- Second, upload to AWS Lambda.
+
 ### ID and password
 
 First, Create `settings.json` in a directory which contains `scraping.py`.
@@ -43,11 +53,11 @@ Scond, Write ID in first row and password as follows.
         "criteria_hours":168 
     },
     "line":{
-        "is_enabled":true,
+        "is_enabled":false,
         "token":"line-token-from-line-notify"
     },
     "slack":{
-        "is_enabled":true,
+        "is_enabled":false,
         "token":"slack-token-from-custom-integration"
     }
 }

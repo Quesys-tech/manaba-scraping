@@ -2,3 +2,4 @@
 .venv/
 #id&password
 settings.json
+packages/
