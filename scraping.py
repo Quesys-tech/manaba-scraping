@@ -115,6 +115,10 @@ def push2slack(near_deadlines, token):
     webhook_url = url+token
 
     message_body = '@channel\n'
+
+    if(len(near_deadlines) == 0):
+        message_body+="締め切りが近づいている課題はありません"
+
     for assignment in near_deadlines:
         message_body += '<' + \
             assignment['link']+'|'+assignment['title'] + \
@@ -135,6 +139,10 @@ def push2line(near_deadlines, token):
     url = "https://notify-api.line.me/api/notify"
 
     message_body = ""
+
+    if(len(near_deadlines) == 0):
+        message_body+="締め切りが近づいている課題はありません"
+
     for assignment in near_deadlines:
         message_body += assignment['title'] + \
             ' 残り時間:'+str(assignment['timedelta']) + '\n'
