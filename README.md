@@ -2,7 +2,7 @@
 
 This is a script that scrape assignments which haven't been submitted, and notify if deadline is close.
 
-## install
+## Install
 
 It requires these libraries.
 
@@ -11,19 +11,19 @@ It requires these libraries.
 - pytz
 - requests
 
-### instalation of libraries using conda
+### Installation of libraries using conda
 
 ```shell
 conda install beautifulsoup4 lxml pytz requests
 ```
 
-### instalation of libraries using pip
+### installation of libraries using pip
 
 ```shell
 pip install beautifulsoup4 lxml pytz requests
 ```
 
-### instalation of libraries using pipenv
+### installation of libraries using pipenv
 
 ```shell
 cd manaba-scraping
