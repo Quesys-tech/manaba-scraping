@@ -126,9 +126,6 @@ def push2slack(near_deadlines, token):
 
     requests.post(webhook_url, data=json.dumps({
         'text': message_body,  # 投稿するテキスト
-        'username': u'manaba 宿題',  # 投稿のユーザー名
-        'icon_emoji': u':ghost:',  # 投稿のプロフィール画像に入れる絵文字
-        'link_names': 1,  # メンションを有効にする
     }))
 
 # line notifyに送信
