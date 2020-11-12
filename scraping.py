@@ -98,7 +98,7 @@ def FindNearDeadline(assignments, criteria_hours):
             continue
 
         deadline = datetime.datetime.strptime(
-            assignment['deadline']+'+0900', '%Y-%m-%d %H:%M%z')  # 日本標準時を示す"+0900"を追加
+            assignment['deadline']+'+0900', '%Y-%m-%d %H:%M%z')  # 日本標準時を示す'+0900'を追加
 
         # print(deadline)
 
@@ -127,7 +127,7 @@ def push2slack(near_deadlines, token):
     message_body = '@channel\n'
 
     if(len(near_deadlines) == 0):
-        message_body+="締め切りが近づいている課題はありません"
+        message_body += '締め切りが近づいている課題はありません'
 
     for assignment in near_deadlines:
         message_body += '<' + \
@@ -143,50 +143,49 @@ def push2slack(near_deadlines, token):
 
 def push2line(near_deadlines, token):
 
-    url = "https://notify-api.line.me/api/notify"
+    url = 'https://notify-api.line.me/api/notify'
 
-    message_body = ""
+    message_body = ''
 
     if(len(near_deadlines) == 0):
-        message_body+="締め切りが近づいている課題はありません"
+        message_body += '締め切りが近づいている課題はありません'
 
     for assignment in near_deadlines:
         message_body += assignment['title'] + \
             ' 残り時間:'+str(assignment['timedelta']) + '\n'
 
     requests.post(url, headers={
-                  "Authorization": "Bearer " + token}, params={"message": message_body})
+                  'Authorization': 'Bearer ' + token}, params={'message': message_body})
 
 
-def main():
+def scraping_helper(secrets=None):
 
     # ファイルから設定の読み取り
     secret_file = Path(__file__).parent.resolve() / 'settings.json'
 
-    try:
-        with open(str(secret_file)) as f:
+    if secrets is None:
+        try:
+            with open(str(secret_file)) as f:
 
-            json_data = json.load(f)
+                secrets = json.load(f)
 
-            username = json_data["base"]['user']
-            password = json_data['base']['pass']
-            assignments = GetTable(username, password)
+        except FileNotFoundError:
+            sys.stderr.write('Settings.json not found!\n')
+            sys.exit(1)
 
-            criteria_hours = json_data['base']['criteria_hours']
-            near_deadlines = FindNearDeadline(assignments, criteria_hours)
+    username = secrets['base']['user']
+    password = secrets['base']['pass']
+    assignments = GetTable(username, password)
 
-            if json_data['line']['is_enabled'] == True:
+    criteria_hours = secrets['base']['criteria_hours']
+    near_deadlines = FindNearDeadline(assignments, criteria_hours)
 
-                push2line(near_deadlines, json_data['line']['token'])
+    if secrets['line']['is_enabled'] == True:
+        push2line(near_deadlines, secrets['line']['token'])
 
-            if json_data['slack']['is_enabled'] == True:
-
-                push2line(near_deadlines, json_data['slack']['token'])
-
-    except FileNotFoundError:
-        sys.stderr.write('Settings.json not found!\n')
-        sys.exit(1)
+    if secrets['slack']['is_enabled'] == True:
+        push2line(near_deadlines, secrets['slack']['token'])
 
 
 if __name__ == '__main__':
-    main()
+    scraping_helper()
