@@ -26,7 +26,6 @@ pip install beautifulsoup4 lxml pytz requests
 ### installation of libraries using pipenv
 
 ```shell
-cd manaba-scraping
 pipenv install
 ```
 
